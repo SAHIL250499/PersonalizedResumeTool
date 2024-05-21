@@ -1,9 +1,11 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 const Language = ({value,languagedata}) => {
 
   const [language,setLanguage]=useState('');
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(()=>{
     if(languagedata){
@@ -13,11 +15,10 @@ const Language = ({value,languagedata}) => {
 
   const updateLanguage=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/languageid/${value}/updateLanguage`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/languageid/${value}/updateLanguage`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 

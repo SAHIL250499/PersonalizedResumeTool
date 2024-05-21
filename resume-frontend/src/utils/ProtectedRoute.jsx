@@ -1,10 +1,10 @@
 import React from 'react'
 import { useAuthContext } from '../hooks/useAuthContext'
-import { Navigate, Outlet } from 'react-router-dom'
+import {useLocation, Navigate, Outlet } from 'react-router-dom'
 const ProtectedRoute = () => {
-    const {user}=useAuthContext()
-    console.log(user);
-    return user?<Outlet/>:<Navigate to='/login'/>
+    const {user}=useAuthContext();
+    const location = useLocation();
+    return (user?<Outlet/>:<Navigate to="/"/>)
 }
 
 export default ProtectedRoute

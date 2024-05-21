@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 
 export type HeaderDocument=Header & Document;
@@ -15,6 +15,10 @@ export class Header{
 
     @Prop({required:false})
     desc:string;
+
+    @Prop({type:Object})
+    socialLink: object;
+
 }
 
 export const HeaderSchema=SchemaFactory.createForClass(Header);

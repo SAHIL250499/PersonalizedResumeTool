@@ -8,14 +8,14 @@ import Achievements from './ResumeComponents/Achievements'
 import Language from './ResumeComponents/Language'
 import Interest from './ResumeComponents/Interest'
 import Navbar from './ResumeComponents/Navbar'
-import { useAuthContext } from './hooks/useAuthContext'
-import axios from 'axios'
 import Preview from './ResumeComponents/Preview'
+import useAxiosPrivate from './hooks/useAxiosPrivate';
 
 
-const Resume = (props) => {
-  const {dispatch}=useAuthContext();
+const Resume = () => {
   const inputRef=useRef(null);
+  const axiosPrivate = useAxiosPrivate();
+
 
   const [workExpList,setWorkExpList]=useState([<WorkExperience key={0} value={0}/>]);
   const [educationList,setEducationlist]=useState([<Education key={0} value={0} />]);
@@ -25,17 +25,6 @@ const Resume = (props) => {
   const [languageList,setLanguageList]=useState([<Language key={0} value={0}/>]);
   const [interestList,setInterestList]=useState([<Interest key={0} value={0}/>]);
 
-  useEffect(()=>{
-    const timeoutId=setInterval(()=>{
-      console.log("timeout");
-      localStorage.removeItem('user');
-      dispatch({type:'LOGOUT'})
-    },new Date(Date.now()+3600000).getTime());
-    // new Date(Date.now()+3600000)
-
-    return ()=>clearTimeout(timeoutId);
-
-  },[])
 
   useEffect(()=>{
     getWorkExp();
@@ -51,11 +40,11 @@ const Resume = (props) => {
 
   const getWorkExp=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getWorkExp',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getWorkExp');
     
       const json=response.data;
-    
-      if(json){
+      
+      if(json && json.length!==0){
       setWorkExpList([]);
       const workExpComponents=json.map((data,index)=>(
         <WorkExperience key={index} value={index} workexpdata={data}/>
@@ -64,18 +53,17 @@ const Resume = (props) => {
     }
     }
     catch(err){
-      console.log(err)
-    
+      console.log(err);
     };
   }
 
 
   const getEducation=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getEducation',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getEducation');
       
       const json=response.data;
-      if(json){
+      if(json && json.length!==0){
     
       setEducationlist([]);
       
@@ -87,18 +75,15 @@ const Resume = (props) => {
     }
     }
     catch(err){
-      console.log(err)
-    
+      console.log(err);
     };
   }
 
   const getProject=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getProject',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getProject');
       const json=response.data;
-      console.log(response.data);
-    
-      if(json){
+      if(json && json.length!==0){
       setProjectsList([]);
   
       const projectComponents=json.map((data,index)=>(
@@ -108,16 +93,15 @@ const Resume = (props) => {
     }
     }
     catch(err){
-      console.log(err)
-    
+      console.log(err);
     };
   }
 
   const getSkills=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getSkills',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getSkills');
       const json=response.data;
-      if(json){
+      if(json && json.length!==0){
       setSkillsList([]);
   
       const skillComponents=json.map((data,index)=>(
@@ -127,15 +111,15 @@ const Resume = (props) => {
       }
     }
     catch(err){
-      console.log(err)
+      console.log(err);
     };
   }
 
   const getAchievements=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getAchievements',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getAchievements');
       const json=response.data;
-      if(json){
+      if(json && json.length!==0){
       setAchievementsList([]);
   
       const achievementComponents=json.map((data,index)=>(
@@ -145,15 +129,15 @@ const Resume = (props) => {
       }
     }
     catch(err){
-      console.log(err)
+      console.log(err);
     };
   }
 
   const getLanguages=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getLanguages',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getLanguages');
       const json=response.data;
-      if(json){
+      if(json && json.length!==0){
       setLanguageList([]);
       const languageComponents=json.map((data,index)=>(
         <Language key={index} value={index} languagedata={data}/>
@@ -162,15 +146,15 @@ const Resume = (props) => {
       }
     }
     catch(err){
-      console.log(err)
+      console.log(err);
     };
   }
 
   const getInterests=async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/users/getInterests',{withCredentials:true});
+      const response=await axiosPrivate.get('/users/getInterests');
       const json=response.data;
-      if(json){
+      if(json && json.length!==0){
       setInterestList([]);
       const interestComponents=json.map((data,index)=>(
         <Interest key={index} value={index} interestdata={data}/>
@@ -179,7 +163,7 @@ const Resume = (props) => {
       }
     }
     catch(err){
-      console.log(err)
+      console.log(err);
     };
   }
 
@@ -248,7 +232,7 @@ const Resume = (props) => {
    
   const deleteLastWorkExp=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastWorkExp',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastWorkExp');
     } 
     catch(err){
       console.error(err);
@@ -257,7 +241,7 @@ const Resume = (props) => {
 
   const deleteLastEducation=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastEducation',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastEducation');
     } 
     catch(err){
       console.error(err);
@@ -265,7 +249,7 @@ const Resume = (props) => {
   }
   const deleteLastProject=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastProject',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastProject');
     } 
     catch(err){
       console.error(err);
@@ -274,7 +258,7 @@ const Resume = (props) => {
 
   const deleteLastSkill=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastSkills',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastSkills');
     }
     catch(err){
       console.error(err);
@@ -283,7 +267,7 @@ const Resume = (props) => {
 
   const deleteLastAchievement=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastAchievements',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastAchievements');
     }
     catch(err){
       console.error(err);
@@ -292,7 +276,7 @@ const Resume = (props) => {
 
   const deleteLastLanguage=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastLanguages',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastLanguages');
     }
     catch(err){
       console.error(err);
@@ -301,7 +285,7 @@ const Resume = (props) => {
 
   const deleteLastInterest=async ()=>{
     try{
-      const response=await axios.delete('http://localhost:3001/users/deleteLastInterests',{withCredentials:true});
+      const response=await axiosPrivate.delete('/users/deleteLastInterests');
     }
     catch(err){
       console.error(err);

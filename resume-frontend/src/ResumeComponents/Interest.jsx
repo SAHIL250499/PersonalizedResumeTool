@@ -1,9 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 const Interest = ({value,interestdata}) => {
 
   const [interest,setInterest]=useState('');
+
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(()=>{
     if(interestdata){
@@ -13,11 +16,10 @@ const Interest = ({value,interestdata}) => {
 
   const updateInterest=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/interestid/${value}/updateInterest`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/interestid/${value}/updateInterest`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 

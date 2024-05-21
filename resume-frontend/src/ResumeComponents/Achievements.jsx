@@ -1,9 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const Achievements = ({value,achievementData}) => {
 
   const [achievement,setAchievement]=useState('');
+
+  const axiosPrivate = useAxiosPrivate();
+
   useEffect(()=>{
     if(achievementData){
       setAchievement(achievementData);
@@ -12,11 +15,10 @@ const Achievements = ({value,achievementData}) => {
 
   const updateAchievement=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/achievementid/${value}/updateAchievement`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/achievementid/${value}/updateAchievement`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 

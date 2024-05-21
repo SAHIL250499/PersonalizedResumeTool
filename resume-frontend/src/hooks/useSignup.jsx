@@ -1,25 +1,24 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
-import axios from "axios";
+import axios from '../api/axios';
 
 export const useSignup=()=>{
     const [error,setError]=useState(null)
     const [isLoading,setIsLoading]=useState(null)
     const {dispatch}=useAuthContext();
-    axios.defaults.withCredentials=true;
 
     const signup=async (email,password)=>{
         setIsLoading(true)
         setError(null)
         try{
-        const response=await axios.post('http://localhost:3001/auth/register',{email,password})
-        const json=await response.data
+        const response=await axios.post('/auth/local/register',{email,password},{
+            headers: {'Content-Type':'application/json'},withCredentials: true
+        })
+        const json=await response?.data
         //update authContext
         if(json){
-            localStorage.setItem('user',JSON.stringify(json))
             dispatch({type:'LOGIN',payload:json})
             setIsLoading(false);
-
         }
         
         }

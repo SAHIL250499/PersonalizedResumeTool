@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const WorkExperience = ({value,workexpdata}) => {
   const [jobtitle,setJobTitle]=useState('');
@@ -9,6 +9,7 @@ const WorkExperience = ({value,workexpdata}) => {
   const [endmonth,setEndMonth]=useState('');
   const [endyear,setEndYear]=useState('');
   const [tasks,setTasks]=useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(()=>{
     if(workexpdata){
@@ -29,11 +30,10 @@ const WorkExperience = ({value,workexpdata}) => {
 
   const updateWorkExperience=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/workid/${value}/updateWorkExp`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/workid/${value}/updateWorkExp`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 
@@ -48,22 +48,21 @@ const WorkExperience = ({value,workexpdata}) => {
   }
 
   const handleStartMonth=(e)=>{
-    const newContent = e.target.value;
-    updateWorkExperience({'startmonth':newContent})
+    const newContent = e.target.textContent;
+    updateWorkExperience({'startmonth':newContent});
   }
   const handleStartYear=(e)=>{
-    const newContent = e.target.value;
+    const newContent = e.target.textContent;
     updateWorkExperience({'startyear':newContent})
   }
 
   const handleEndMonth=(e)=>{
-    const newContent = e.target.value;
+    const newContent = e.target.textContent;
     updateWorkExperience({'endmonth':newContent})
   }
 
   const handleEndYear=(e)=>{
-    
-    const newContent = e.target.value;
+    const newContent = e.target.textContent;
     updateWorkExperience({'endyear':newContent})
   }
 
@@ -100,40 +99,23 @@ const WorkExperience = ({value,workexpdata}) => {
                       </h3>
                     </li>
                     <li>
-                      <div className="text-[16px] text-[#449399]">
-                        <input onChange={handleStartMonth}
-                          value={startmonth?startmonth:''}
-                          className="w-10 text-center"
-                          type="number"
-                          oninput="this.value=this.value.slice(0,2)"
-                          placeholder="mm"
-                        /><span>/</span>
-                        <input onChange={handleStartYear}
-                        value={startyear?startyear:''}
-                          className="w-10 text-center"
-                          type="number"
-                          oninput="this.value=this.value.slice(0,4)"
-                          maxlength="4"
-                          placeholder="yyyy"
-                        />
+                      <div className="text-[#449399]">
+                        <span onInput={handleStartMonth}
+                          onBlur={handleStartMonth}
+                          className="w-10 border-b-2 outline-none focus:border-green-500"
+                          contentEditable="true"
+                        >{startmonth?startmonth:'MM'}</span><span>/</span>
+                        <span onInput={handleStartYear} onBlur={handleStartYear} contentEditable="true"
+                          className="w-10 border-b-2 outline-none focus:border-green-500"
+                        >{startyear?startyear:'YYYY'}</span>
                         <span>-</span>
-                        <input onChange={handleEndMonth}
-                          value={endmonth?endmonth:''}
-                          className="w-10 text-center"
-                          type="number"
-                          oninput="this.value=this.value.slice(0,2)"
-                          maxlength="2"
-                          placeholder="mm"
-                        />
+                        <span onInput={handleEndMonth} onBlur={handleEndMonth} contentEditable="true"
+                          className="w-10 border-b-2 outline-none focus:border-green-500"
+                        >{endmonth?endmonth:'MM'}</span>
                         <span>/</span>
-                        <input onChange={handleEndYear}
-                          value={endyear?endyear:''}
-                          className="w-10 text-center"
-                          type="number"
-                          oninput="this.value=this.value.slice(0,4)"
-                          maxlength="4"
-                          placeholder="yyyy"
-                        />
+                        <span onInput={handleEndYear} onBlur={handleEndYear} contentEditable="true"
+                          className="w-10 border-b-2 outline-none focus:border-green-500"
+                        >{endyear?endyear:'YYYY'}</span>
                       </div>
                     </li>
 

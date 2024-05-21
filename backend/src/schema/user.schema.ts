@@ -10,16 +10,19 @@ export type UserDocument=User & Document;
 @Schema()
 export class User{
     
-    @Prop()
+    @Prop({unique:true})
     email:string;
 
     @Prop()
     password:string;
 
-    @Prop({type:mongoose.Schema.Types.ObjectId,ref:'Header'})
+    @Prop()
+    hashedRt:string;
+
+    @Prop({type:mongoose.Schema.Types.ObjectId,ref:'Header',required:false})
     headerid?:Header;
 
-    @Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'WorkExp'}]})
+    @Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'WorkExp',required:false}]})
     workexparray?:WorkExp[];
 
     @Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'Education'}]})

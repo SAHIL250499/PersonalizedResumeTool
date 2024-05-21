@@ -1,24 +1,14 @@
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import html2pdf from 'html2pdf.js';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import {useReactToPrint} from 'react-to-print';
-import Resume from '../Resume';
 
 const Preview = forwardRef((props,ref) => {
   
   const [loader,setLoader]=useState(false);
 
-  
-
-  // const handlePrint=useReactToPrint({
-  //   content:()=>ref.current
-  // })
-
   const downloadPDF=async ()=>{
     // setLoader(true);
+    setLoader(true);
     const capture=ref.current;  
-    const input=ref.current;
     document.querySelectorAll(".border-b-2").forEach((i)=>{
       i.classList.add("removeborder");
       i.classList.remove("border-b-2");
@@ -30,25 +20,19 @@ const Preview = forwardRef((props,ref) => {
     document.querySelectorAll(".addbutton").forEach((i)=>{
       i.classList.add("hidden");
     })
-    
-    html2canvas(capture).then((canvas)=>{
-      const imgData=canvas.toDataURL('img/png');
-      const doc=new html2pdf();
-      doc.addImage(imgData,'PNG',0,0);
-      // setLoader(false);
-      doc.save('person_resume.pdf');
-    })
-    const rect=capture.getBoundingClientRect();
-    console.log(rect);
 
-    // let opt = {
-    //   margin: 0,
-    //   filename: "Demopdf.pdf",
-    //   image: { type: "png" },
-    //   html2canvas: { quality: 2, useCORS: true,scale:1, scrollY: 0 },
-    //   jsPDF: { unit: "in",format:[11.7,12], orientation: "portrait" },
-    // };
-    // await html2pdf().set(opt).from(capture).toImg().save();
+    const rect=capture.getBoundingClientRect();
+
+    let opt = {
+      margin: 0,
+      filename: "Demopdf.pdf",
+      image: { type: "jpeg" ,quality:0.98},
+      html2canvas: {scale:2,width:rect.width,height:rect.height},
+      jsPDF: { unit: "in",format:[rect.height/96,rect.width/96], orientation: "portrait" },
+    };
+    await html2pdf().set(opt).from(capture).toContainer().toCanvas().toImg().toPdf().save();
+    
+    
 
     document.querySelectorAll(".removeborder").forEach((i)=>{
       i.classList.add("border-b-2");
@@ -62,6 +46,8 @@ const Preview = forwardRef((props,ref) => {
     document.querySelectorAll(".addbutton").forEach((i)=>{
       i.classList.remove("hidden");
     })
+
+    setLoader(false);
     
   }
 

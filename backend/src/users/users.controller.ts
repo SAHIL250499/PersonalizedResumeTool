@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UsersService } from './users.service';
+import { GetCurrentUserId } from 'src/auth/common/decorators';
 
 @Controller('users')
 export class UsersController {
@@ -9,100 +9,89 @@ export class UsersController {
     constructor(private usersService:UsersService){}
     
     @Patch('updateHeader')
-    @UseGuards(JwtAuthGuard)
-    updateHeader(@Req() req:Request,@Body() updateUserDto:any){
-        return this.usersService.updateHeader(req.user,updateUserDto);
+    updateHeader(@GetCurrentUserId() userId:number,@Body() updateUserDto:any){
+        return this.usersService.updateHeader(userId,updateUserDto);
+    }
+
+    @Patch('updateSocials')
+    updateSocial(@GetCurrentUserId() userId:number,@Body() updateSocialDto: any){
+        return this.usersService.updateSocial(userId,updateSocialDto);
     }
 
     @Get('getHeader')
-    @UseGuards(JwtAuthGuard)
-    getHeader(@Req() req:Request){
-        return this.usersService.getHeader(req.user);
+    getHeader(@GetCurrentUserId() userId:number){
+        return this.usersService.getHeader(userId);
     }
 
     @Patch('/workid/:workid/updateWorkExp')
-    @UseGuards(JwtAuthGuard)
-    updateWorkExp(@Req() req:Request,@Param() param:any,@Body() updateWorkExpDto:any){
-        return this.usersService.updateWorkExp(req.user,param.workid,updateWorkExpDto);
+    updateWorkExp(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateWorkExpDto:any){
+        return this.usersService.updateWorkExp(userId,param.workid,updateWorkExpDto);
     }
 
     @Patch('/educationid/:educationid/updateEducation')
-    @UseGuards(JwtAuthGuard)
-    updateEducation(@Req() req:Request,@Param() param:any,@Body() updateEducationDto:any){
-        return this.usersService.updateEducation(req.user,param.educationid,updateEducationDto);
+    updateEducation(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateEducationDto:any){
+        return this.usersService.updateEducation(userId,param.educationid,updateEducationDto);
     }
 
     @Patch('/projectid/:projectid/updateProject')
-    @UseGuards(JwtAuthGuard)
-    updateProject(@Req() req:Request,@Param() param:any,@Body() updateProjectDto:any){
-        return this.usersService.updateProject(req.user,param.projectid,updateProjectDto);
+    updateProject(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateProjectDto:any){
+        return this.usersService.updateProject(userId,param.projectid,updateProjectDto);
     }
 
     @Patch('/skillid/:skillid/updateSkill')
-    @UseGuards(JwtAuthGuard)
-    updateSkill(@Req() req:Request,@Param() param:any,@Body() updateSkillDto:any){
-        return this.usersService.updateSkills(req.user,param.skillid,updateSkillDto);
+    updateSkill(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateSkillDto:any){
+        return this.usersService.updateSkills(userId,param.skillid,updateSkillDto);
     }
 
     @Patch('/achievementid/:achievementid/updateAchievement')
-    @UseGuards(JwtAuthGuard)
-    updateAchievement(@Req() req:Request,@Param() param:any,@Body() updateAchievementDto:any){
-        return this.usersService.updateAchievement(req.user,param.achievementid,updateAchievementDto);
+    updateAchievement(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateAchievementDto:any){
+        return this.usersService.updateAchievement(userId,param.achievementid,updateAchievementDto);
     }
 
     @Patch('/languageid/:languageid/updateLanguage')
-    @UseGuards(JwtAuthGuard)
-    updateLanguage(@Req() req:Request,@Param() param:any,@Body() updateLanguageDto:any){
-        return this.usersService.updateLanguage(req.user,param.languageid,updateLanguageDto);
+    updateLanguage(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateLanguageDto:any){
+        return this.usersService.updateLanguage(userId,param.languageid,updateLanguageDto);
     }
 
     @Patch('/interestid/:interestid/updateInterest')
-    @UseGuards(JwtAuthGuard)
-    updateInterest(@Req() req:Request,@Param() param:any,@Body() updateInterestDto:any){
-        return this.usersService.updateInterest(req.user,param.interestid,updateInterestDto);
+    updateInterest(@GetCurrentUserId() userId:number,@Param() param:any,@Body() updateInterestDto:any){
+        return this.usersService.updateInterest(userId,param.interestid,updateInterestDto);
     }
 
 
     @Get('getWorkExp')
-    @UseGuards(JwtAuthGuard)
-    getWorkExp(@Req() req:Request){
-        return this.usersService.getWorkExp(req.user);
+    getWorkExp(@GetCurrentUserId() userId:number){
+        return this.usersService.getWorkExp(userId);
     }
 
     @Get('getEducation')
-    @UseGuards(JwtAuthGuard)
-    getEducation(@Req() req:Request){
-        return this.usersService.getEducation(req.user);
+    getEducation(@GetCurrentUserId() userId:number){
+        return this.usersService.getEducation(userId);
     }
 
     @Get('getProject')
-    @UseGuards(JwtAuthGuard)
-    getProject(@Req() req:Request){
-        return this.usersService.getProject(req.user);
+    getProject(@GetCurrentUserId() userId:number){
+        return this.usersService.getProject(userId);
     }
 
     @Get('getSkills')
-    @UseGuards(JwtAuthGuard)
-    getSkills(@Req() req: Request){
-        return this.usersService.getSkills(req.user);
+    getSkills(@GetCurrentUserId() userId:number){
+        return this.usersService.getSkills(userId);
     }
 
     @Get('getAchievements')
-    @UseGuards(JwtAuthGuard)
-    getAchievements(@Req() req: Request){
-        return this.usersService.getAchievements(req.user);
+    getAchievements(@GetCurrentUserId() userId:number){
+        return this.usersService.getAchievements(userId);
     }
 
     @Get('getLanguages')
-    @UseGuards(JwtAuthGuard)
-    getLanguages(@Req() req: Request){
-        return this.usersService.getLanguages(req.user);
+    getLanguages(@GetCurrentUserId() userId:number){
+        return this.usersService.getLanguages(userId);
     }
 
     @Get('getInterests')
-    @UseGuards(JwtAuthGuard)
-    getInterests(@Req() req: Request){
-        return this.usersService.getInterests(req.user);
+    getInterests(@GetCurrentUserId() userId:number){
+        return this.usersService.getInterests(userId);
     }
 
 
@@ -110,45 +99,38 @@ export class UsersController {
 
 
     @Delete('deleteLastWorkExp')
-    @UseGuards(JwtAuthGuard)
-    deleteLastWorkExp(@Req() req:Request){
-        return this.usersService.deleteLastWorkExp(req.user);
+    deleteLastWorkExp(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastWorkExp(userId);
     }
 
     @Delete('deleteLastEducation')
-    @UseGuards(JwtAuthGuard)
-    deleteLastEducation(@Req() req:Request){
-        return this.usersService.deleteLastEducation(req.user);
+    deleteLastEducation(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastEducation(userId);
     }
 
     @Delete('deleteLastProject')
-    @UseGuards(JwtAuthGuard)
-    deleteLastProject(@Req() req:Request){
-        return this.usersService.deleteLastProject(req.user);
+    deleteLastProject(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastProject(userId);
     }
 
     @Delete('deleteLastSkills')
-    @UseGuards(JwtAuthGuard)
-    deleteLastSkills(@Req() req:Request){
-        return this.usersService.deleteLastSkills(req.user);
+    deleteLastSkills(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastSkills(userId);
     }
 
     @Delete('deleteLastAchievements')
-    @UseGuards(JwtAuthGuard)
-    deleteLastAchievements(@Req() req:Request){
-        return this.usersService.deleteLastAchievements(req.user);
+    deleteLastAchievements(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastAchievements(userId);
     }
 
     @Delete('deleteLastLanguages')
-    @UseGuards(JwtAuthGuard)
-    deleteLastLanguages(@Req() req:Request){
-        return this.usersService.deleteLastLanguages(req.user);
+    deleteLastLanguages(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastLanguages(userId);
     }
 
     @Delete('deleteLastInterests')
-    @UseGuards(JwtAuthGuard)
-    deleteLastInterests(@Req() req:Request){
-        return this.usersService.deleteLastInterests(req.user);
+    deleteLastInterests(@GetCurrentUserId() userId:number){
+        return this.usersService.deleteLastInterests(userId);
     }
 
 

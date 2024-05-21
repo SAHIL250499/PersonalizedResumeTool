@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
-import axios from "axios";
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 export const useLogout = () => {
 
     const {dispatch}=useAuthContext();
-    axios.defaults.withCredentials=true;
+    const axiosPrivate = useAxiosPrivate();
     const logout=async ()=>{
         //remove user from cookie
         try{
-        const response=await axios.get('http://localhost:3001/auth/logout')
-        localStorage.removeItem('user');
+        const response=await axiosPrivate.post('/auth/logout');
         //update authContext
         dispatch({type:'LOGOUT'})
         }

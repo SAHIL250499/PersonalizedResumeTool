@@ -1,8 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const Skills = ({value,skilldata}) => {
   const [skill,setSkill]=useState('');
+  const axiosPrivate = useAxiosPrivate();
   
   useEffect(()=>{
     if(skilldata){
@@ -12,11 +13,10 @@ const Skills = ({value,skilldata}) => {
 
   const updateSkill=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/skillid/${value}/updateSkill`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/skillid/${value}/updateSkill`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 

@@ -1,10 +1,12 @@
-import axios from 'axios';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 
 const PersonalProjects = ({value,projectdata}) => {
 
   const [projectname,setProjectName]=useState('');
   const [projects,setProjects]=useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(()=>{
     if(projectdata){
@@ -20,11 +22,10 @@ const PersonalProjects = ({value,projectdata}) => {
 
   const updateProject=async(obj)=>{
     try{
-      const response=await axios.patch(`http://localhost:3001/users/projectid/${value}/updateProject`,obj,{withCredentials:true
-      });
+      const response=await axiosPrivate.patch(`/users/projectid/${value}/updateProject`,obj);
     }
     catch(err){
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 

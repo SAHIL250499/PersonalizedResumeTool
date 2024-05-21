@@ -16,12 +16,12 @@ export class UsersService {
     ){}
 
     
-    async updateHeader(body:any,updateUserDto:any){
-       const isHeaderExists=await this.userModel.findOne({_id:body._id,headerid:{$ne:null}});
+    async updateHeader(userId:number,updateUserDto:any){
+       const isHeaderExists=await this.userModel.findOne({_id:userId,headerid:{$ne:null}});
        if(!isHeaderExists){ 
        const header=new this.headerModel(updateUserDto);
        const savedHeader=await header.save();
-       const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{headerid:savedHeader._id},{new:true});
+       const userUpdate=await this.userModel.findByIdAndUpdate(userId,{headerid:savedHeader._id},{new:true});
        return userUpdate
        }
        else{
@@ -30,12 +30,27 @@ export class UsersService {
        }
     }
 
-    async updateWorkExp(body:any,workid:any,updateWorkExpDto:any){
-        const isworkExpExists=await this.userModel.findOne({_id:body._id,workexparray:{$ne:null}});
+    async updateSocial(userId:number,updateSocialDto:any){
+        const isHeaderExists=await this.userModel.findOne({_id:userId,headerid:{$ne:null}});
+        if(!isHeaderExists){ 
+            const header=await this.headerModel.create({
+                socialLink:updateSocialDto
+            });
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{headerid:header._id},{new:true});
+            return userUpdate
+            }
+        else{
+                const userUpdate=await this.headerModel.findByIdAndUpdate(isHeaderExists.headerid,{$set:{socialLink:updateSocialDto}},{new:true});
+                return userUpdate
+        }
+    }
+
+    async updateWorkExp(userId:number,workid:any,updateWorkExpDto:any){
+        const isworkExpExists=await this.userModel.findOne({_id:userId,workexparray:{$ne:null}});
         if(!isworkExpExists){
         const workExp=new this.workexpModel(updateWorkExpDto);
         const savedworkExp=await workExp.save();
-        const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{workexparray:savedworkExp._id},{new:true});
+        const userUpdate=await this.userModel.findByIdAndUpdate(userId,{workexparray:savedworkExp._id},{new:true});
         return userUpdate;
         }
         if(workid<isworkExpExists.workexparray.length){
@@ -44,17 +59,17 @@ export class UsersService {
         }else{
             const workExp=new this.workexpModel(updateWorkExpDto);
             const savedworkExp=await workExp.save();
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{workexparray:savedworkExp._id}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{workexparray:savedworkExp._id}},{new:true});
             return userUpdate;
         }   
     }
 
-    async updateEducation(body:any,educationid:any,updateEducationDto:any){
-        const iseducationExists=await this.userModel.findOne({_id:body._id,educationarray:{$ne:null}});
+    async updateEducation(userId:number,educationid:any,updateEducationDto:any){
+        const iseducationExists=await this.userModel.findOne({_id:userId,educationarray:{$ne:null}});
         if(!iseducationExists){
             const education=new this.educationModel(updateEducationDto);
             const savededucation=await education.save();
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{educationarray:savededucation._id},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{educationarray:savededucation._id},{new:true});
             return userUpdate;
         }
         if(educationid<iseducationExists.educationarray.length){
@@ -64,18 +79,18 @@ export class UsersService {
         else{
             const education=new this.educationModel(updateEducationDto);
             const savededucation=await education.save();
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{educationarray:savededucation._id}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{educationarray:savededucation._id}},{new:true});
             return userUpdate;
         }
 
     }
 
-    async updateProject(body:any,projectid:any,updateProjectDto:any){
-        const isprojectExists=await this.userModel.findOne({_id:body._id,projectarray:{$ne:null}});
+    async updateProject(userId:number,projectid:any,updateProjectDto:any){
+        const isprojectExists=await this.userModel.findOne({_id:userId,projectarray:{$ne:null}});
         if(!isprojectExists){
             const project=new this.projectModel(updateProjectDto);
             const savedproject=await project.save();
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{projectarray:savedproject._id},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{projectarray:savedproject._id},{new:true});
             return userUpdate;
         }
         if(projectid<isprojectExists.projectarray.length){
@@ -84,67 +99,67 @@ export class UsersService {
         }else{
             const project=new this.projectModel(updateProjectDto);
             const savedproject=await project.save();
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{projectarray:savedproject._id}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{projectarray:savedproject._id}},{new:true});
             return userUpdate;
         } 
     }
 
-    async updateSkills(body:any,skillid:any,updateSkillDto:any){
-        const isupdateSkills=await this.userModel.findOne({_id:body._id,skills:{$ne:null}});
+    async updateSkills(userId:number,skillid:any,updateSkillDto:any){
+        const isupdateSkills=await this.userModel.findOne({_id:userId,skills:{$ne:null}});
         if(!isupdateSkills){
-            const skill=await this.userModel.findByIdAndUpdate(body._id,{skills:updateSkillDto.skills},{new:true});
+            const skill=await this.userModel.findByIdAndUpdate(userId,{skills:updateSkillDto.skills},{new:true});
             return skill;
         }
         if(skillid<isupdateSkills.skills.length){
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$set:{[`skills.${skillid}`]:updateSkillDto.skills[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$set:{[`skills.${skillid}`]:updateSkillDto.skills[0]}},{new:true});
             return userUpdate;
         }else{
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{skills:updateSkillDto.skills[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{skills:updateSkillDto.skills[0]}},{new:true});
             return userUpdate;
         }
     }
 
-    async updateAchievement(body:any,achievementid:any,updateAchievementDto:any){
-        const isupdateAchievements=await this.userModel.findOne({_id:body._id,achievements:{$ne:null}});
+    async updateAchievement(userId:number,achievementid:any,updateAchievementDto:any){
+        const isupdateAchievements=await this.userModel.findOne({_id:userId,achievements:{$ne:null}});
         if(!isupdateAchievements){
-            const achievement=await this.userModel.findByIdAndUpdate(body._id,{achievements:updateAchievementDto.achievements},{new:true});
+            const achievement=await this.userModel.findByIdAndUpdate(userId,{achievements:updateAchievementDto.achievements},{new:true});
             return achievement;
         }
         if(achievementid<isupdateAchievements.achievements.length){
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$set:{[`achievements.${achievementid}`]:updateAchievementDto.achievements[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$set:{[`achievements.${achievementid}`]:updateAchievementDto.achievements[0]}},{new:true});
             return userUpdate;
         }else{
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{achievements:updateAchievementDto.achievements[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{achievements:updateAchievementDto.achievements[0]}},{new:true});
             return userUpdate;
         }
     }
 
-    async updateLanguage(body:any,languageid:any,updateLanguageDto:any){
-        const isupdateLanguages=await this.userModel.findOne({_id:body._id,languages:{$ne:null}});
+    async updateLanguage(userId:number,languageid:any,updateLanguageDto:any){
+        const isupdateLanguages=await this.userModel.findOne({_id:userId,languages:{$ne:null}});
         if(!isupdateLanguages){
-            const language=await this.userModel.findByIdAndUpdate(body._id,{languages:updateLanguageDto.languages},{new:true});
+            const language=await this.userModel.findByIdAndUpdate(userId,{languages:updateLanguageDto.languages},{new:true});
             return language;
         }
         if(languageid<isupdateLanguages.languages.length){
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$set:{[`languages.${languageid}`]:updateLanguageDto.languages[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$set:{[`languages.${languageid}`]:updateLanguageDto.languages[0]}},{new:true});
             return userUpdate;
         }else{
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{languages:updateLanguageDto.languages[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{languages:updateLanguageDto.languages[0]}},{new:true});
             return userUpdate;
         }
     }
 
-    async updateInterest(body:any,interestid:any,updateInterestDto:any){
-        const isupdateInterests=await this.userModel.findOne({_id:body._id,interests:{$ne:null}});
+    async updateInterest(userId:number,interestid:any,updateInterestDto:any){
+        const isupdateInterests=await this.userModel.findOne({_id:userId,interests:{$ne:null}});
         if(!isupdateInterests){
-            const interest=await this.userModel.findByIdAndUpdate(body._id,{interests:updateInterestDto.interests},{new:true});
+            const interest=await this.userModel.findByIdAndUpdate(userId,{interests:updateInterestDto.interests},{new:true});
             return interest;
         }
         if(interestid<isupdateInterests.interests.length){
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$set:{[`interests.${interestid}`]:updateInterestDto.interests[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$set:{[`interests.${interestid}`]:updateInterestDto.interests[0]}},{new:true});
             return userUpdate;
         }else{
-            const userUpdate=await this.userModel.findByIdAndUpdate(body._id,{$push:{interests:updateInterestDto.interests[0]}},{new:true});
+            const userUpdate=await this.userModel.findByIdAndUpdate(userId,{$push:{interests:updateInterestDto.interests[0]}},{new:true});
             return userUpdate;
         }
     }
@@ -154,60 +169,61 @@ export class UsersService {
 
 
 
-    async getHeader(body:any){
-        const isHeaderExists=await this.userModel.findOne({_id:body._id,headerid:{$ne:null}});
+    async getHeader(userId:number){
+        const isHeaderExists=await this.userModel.findOne({_id:userId,headerid:{$ne:null}});
         if(!isHeaderExists) throw new HttpException('No Header Details',400);
         const getHeaderDetails=await this.headerModel.findById(isHeaderExists.headerid);
         return getHeaderDetails
     }
 
-    async getWorkExp(body:any){
-        const isworkExpExists=await this.userModel.findOne({_id:body._id,workexparray:{$ne:null}});
+
+    async getWorkExp(userId:number){
+        const isworkExpExists=await this.userModel.findOne({_id:userId,workexparray:{$ne:null}});
         if(!isworkExpExists) throw new HttpException('No WorkExp Details',400);
-        const workExpList=(await this.userModel.findOne({_id:body._id},{workexparray:1}).populate('workexparray'));
+        const workExpList=(await this.userModel.findOne({_id:userId},{workexparray:1}).populate('workexparray'));
         return workExpList.workexparray
     }
 
 
-    async getEducation(body:any){
-        const iseducationExists=await this.userModel.findOne({_id:body._id,educationarray:{$ne:null}});
+    async getEducation(userId:number){
+        const iseducationExists=await this.userModel.findOne({_id:userId,educationarray:{$ne:null}});
         if(!iseducationExists) throw new HttpException('No Education Details',400);
-        const educationList=await this.userModel.findOne({_id:body._id},{educationarray:1}).populate('educationarray');
+        const educationList=await this.userModel.findOne({_id:userId},{educationarray:1}).populate('educationarray');
         return educationList.educationarray
     }
 
-    async getProject(body:any){
-        const isprojectExists=await this.userModel.findOne({_id:body._id,projectarray:{$ne:null}});
+    async getProject(userId:number){
+        const isprojectExists=await this.userModel.findOne({_id:userId,projectarray:{$ne:null}});
         if(!isprojectExists) throw new HttpException('No Project Details',400);
-        const projectList=await this.userModel.findOne({_id:body._id},{projectarray:1}).populate('projectarray');
+        const projectList=await this.userModel.findOne({_id:userId},{projectarray:1}).populate('projectarray');
         return projectList.projectarray;
     }
 
-    async getSkills(body:any){
-        const isupdateSkills=await this.userModel.findOne({_id:body._id,skills:{$ne:null}});
+    async getSkills(userId:number){
+        const isupdateSkills=await this.userModel.findOne({_id:userId,skills:{$ne:null}});
         if(!isupdateSkills) throw new HttpException('No Skills Details',400);
-        const skillList=await this.userModel.findOne({_id:body._id},{skills:1});
+        const skillList=await this.userModel.findOne({_id:userId},{skills:1});
         return skillList.skills;
     }
 
-    async getAchievements(body:any){
-        const isupdateAchievements=await this.userModel.findOne({_id:body._id,achievements:{$ne:null}});
+    async getAchievements(userId:number){
+        const isupdateAchievements=await this.userModel.findOne({_id:userId,achievements:{$ne:null}});
         if(!isupdateAchievements) throw new HttpException('No Achievements Details',400);
-        const achievementList=await this.userModel.findOne({_id:body._id},{achievements:1});
+        const achievementList=await this.userModel.findOne({_id:userId},{achievements:1});
         return achievementList.achievements;
     }
 
-    async getLanguages(body:any){
-        const isupdateLanguages=await this.userModel.findOne({_id:body._id,languages:{$ne:null}});
+    async getLanguages(userId:number){
+        const isupdateLanguages=await this.userModel.findOne({_id:userId,languages:{$ne:null}});
         if(!isupdateLanguages) throw new HttpException('No Languages Details',400);
-        const languageList=await this.userModel.findOne({_id:body._id},{languages:1});
+        const languageList=await this.userModel.findOne({_id:userId},{languages:1});
         return languageList.languages;
     }
 
-    async getInterests(body:any){
-        const isupdateInterests=await this.userModel.findOne({_id:body._id,interests:{$ne:null}});
+    async getInterests(userId:number){
+        const isupdateInterests=await this.userModel.findOne({_id:userId,interests:{$ne:null}});
         if(!isupdateInterests) throw new HttpException('No Interests Details',400);
-        const interestList=await this.userModel.findOne({_id:body._id},{interests:1});
+        const interestList=await this.userModel.findOne({_id:userId},{interests:1});
         return interestList.interests;
     }
 
@@ -216,78 +232,78 @@ export class UsersService {
 
 
 
-    async deleteLastWorkExp(body:any){
-        const isworkExpExists=await this.userModel.findOne({_id:body._id,workexparray:{$ne:null}});
+    async deleteLastWorkExp(userId:number){
+        const isworkExpExists=await this.userModel.findOne({_id:userId,workexparray:{$ne:null}});
         if(!isworkExpExists) throw new HttpException('No WorkExp Details to Delete',400);
-        const workExpList=(await this.userModel.findOne({_id:body._id},{workexparray:1})).workexparray;
+        const workExpList=(await this.userModel.findOne({_id:userId},{workexparray:1})).workexparray;
         if(workExpList.length>1){
          const workExpLastid=workExpList.pop();
         const deleteworkExprecord=await this.workexpModel.findByIdAndDelete(workExpLastid);
-        const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{workexparray:1}});
+        const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{workexparray:1}});
         }
         return 'Deleted Successfully'
     }
 
-    async deleteLastEducation(body:any){
-        const iseducationExists=await this.userModel.findOne({_id:body._id,educationarray:{$ne:null}});
+    async deleteLastEducation(userId:number){
+        const iseducationExists=await this.userModel.findOne({_id:userId,educationarray:{$ne:null}});
         if(!iseducationExists) throw new HttpException('No Education Details to Delete',400);
-        const educationList=(await this.userModel.findOne({_id:body._id},{educationarray:1})).educationarray;
+        const educationList=(await this.userModel.findOne({_id:userId},{educationarray:1})).educationarray;
         if(educationList.length>1){
             const educationLastid=educationList.pop();
             const deleteeducationrecord=await this.educationModel.findByIdAndDelete(educationLastid);
-            const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{educationarray:1}});
+            const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{educationarray:1}});
         }
         return 'Deleted Successfully'
     }
 
-    async deleteLastProject(body:any){
-        const isprojectExists=await this.userModel.findOne({_id:body._id,projectarray:{$ne:null}});
+    async deleteLastProject(userId:number){
+        const isprojectExists=await this.userModel.findOne({_id:userId,projectarray:{$ne:null}});
         if(!isprojectExists) throw new HttpException('No Project Details to Delete',400);
-        const projectList=(await this.userModel.findOne({_id:body._id},{projectarray:1})).projectarray;
+        const projectList=(await this.userModel.findOne({_id:userId},{projectarray:1})).projectarray;
         if(projectList.length>1){
             const projectLastid=projectList.pop();
            const deleteprojectrecord=await this.projectModel.findByIdAndDelete(projectLastid);
-           const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{projectarray:1}});
+           const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{projectarray:1}});
            }
         return 'Deleted Successfully'
     }
 
-    async deleteLastSkills(body:any){
-        const isupdateSkills=await this.userModel.findOne({_id:body._id,skills:{$ne:null}});
+    async deleteLastSkills(userId:number){
+        const isupdateSkills=await this.userModel.findOne({_id:userId,skills:{$ne:null}});
         if(!isupdateSkills) throw new HttpException('No Skills Details to Delete',400);
-        const skillList=(await this.userModel.findOne({_id:body._id},{skills:1})).skills;
+        const skillList=(await this.userModel.findOne({_id:userId},{skills:1})).skills;
         if(skillList.length>1){
-            const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{skills:1}});
+            const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{skills:1}});
         }
         return 'Deleted Successfully'
     }
 
-    async deleteLastAchievements(body:any){
-        const isupdateAchievements=await this.userModel.findOne({_id:body._id,achievements:{$ne:null}});
+    async deleteLastAchievements(userId:number){
+        const isupdateAchievements=await this.userModel.findOne({_id:userId,achievements:{$ne:null}});
         if(!isupdateAchievements) throw new HttpException('No Achievements Details to Delete',400);
-        const achievementList=(await this.userModel.findOne({_id:body._id},{achievements:1})).achievements;
+        const achievementList=(await this.userModel.findOne({_id:userId},{achievements:1})).achievements;
         if(achievementList.length>1){
-            const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{achievements:1}});
+            const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{achievements:1}});
         }
         return 'Deleted Successfully'
     }
 
-    async deleteLastLanguages(body:any){
-        const isupdateLanguages=await this.userModel.findOne({_id:body._id,languages:{$ne:null}});
+    async deleteLastLanguages(userId:number){
+        const isupdateLanguages=await this.userModel.findOne({_id:userId,languages:{$ne:null}});
         if(!isupdateLanguages) throw new HttpException('No Language Details to Delete',400);
-        const languageList=(await this.userModel.findOne({_id:body._id},{languages:1})).languages;
+        const languageList=(await this.userModel.findOne({_id:userId},{languages:1})).languages;
         if(languageList.length>1){
-            const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{languages:1}});
+            const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{languages:1}});
         }
         return 'Deleted Successfully'
     }
 
-    async deleteLastInterests(body:any){
-        const isupdateInterests=await this.userModel.findOne({_id:body._id,interests:{$ne:null}});
+    async deleteLastInterests(userId:number){
+        const isupdateInterests=await this.userModel.findOne({_id:userId,interests:{$ne:null}});
         if(!isupdateInterests) throw new HttpException('No Interest Details to Delete',400);
-        const interestList=(await this.userModel.findOne({_id:body._id},{interests:1})).interests;
+        const interestList=(await this.userModel.findOne({_id:userId},{interests:1})).interests;
         if(interestList.length>1){
-            const deleteLast=await this.userModel.updateOne({_id:body._id},{$pop:{interests:1}});
+            const deleteLast=await this.userModel.updateOne({_id:userId},{$pop:{interests:1}});
         }
         return 'Deleted Successfully'
     }
