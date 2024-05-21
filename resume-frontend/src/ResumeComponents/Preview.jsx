@@ -30,9 +30,7 @@ const Preview = forwardRef((props,ref) => {
       html2canvas: {scale:2,width:rect.width,height:rect.height},
       jsPDF: { unit: "in",format:[rect.height/96,rect.width/96], orientation: "portrait" },
     };
-    await html2pdf().set(opt).from(capture).toContainer().toCanvas().toImg().toPdf().save();
-    
-    
+    await html2pdf().set(opt).from(capture).save();
 
     document.querySelectorAll(".removeborder").forEach((i)=>{
       i.classList.add("border-b-2");
