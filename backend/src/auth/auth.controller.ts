@@ -17,6 +17,7 @@ export class AuthController {
         const {access_token,refresh_token,refresh_expires_in}=await this.authService.register(dto);
         res.cookie('refresh_token',refresh_token,{
             httpOnly:true,
+            secure: true,
             expires:refresh_expires_in,
         });
         return {access_token,refresh_token};
@@ -29,6 +30,7 @@ export class AuthController {
         const {access_token,refresh_token,refresh_expires_in}= await this.authService.login(dto);
         res.cookie('refresh_token',refresh_token,{
             httpOnly:true,
+            secure: true,
             expires:refresh_expires_in,
         });
         return {access_token,refresh_token};
@@ -40,6 +42,7 @@ export class AuthController {
         const response=this.authService.logout(userId);
         res.cookie('refresh_token','logout',{
             httpOnly:true,
+            secure: true,
             expires:new Date(Date.now())
         })
         return response;
