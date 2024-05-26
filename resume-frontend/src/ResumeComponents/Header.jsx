@@ -28,7 +28,6 @@ const Header = () => {
    const getHeader=async()=>{
     try{
       const response=await axiosPrivate.get('/users/getHeader');
-      console.log(response.data);
       if(response.data){
       setName(response.data.name);
       setTitle(response.data.title);
