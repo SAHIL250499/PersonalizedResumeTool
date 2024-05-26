@@ -18,6 +18,7 @@ export class AuthController {
         res.cookie('refresh_token',refresh_token,{
             httpOnly:true,
             secure: true,
+            sameSite: 'none',
             expires:refresh_expires_in,
         });
         return {access_token,refresh_token};
@@ -31,6 +32,7 @@ export class AuthController {
         res.cookie('refresh_token',refresh_token,{
             httpOnly:true,
             secure: true,
+            sameSite: 'none',
             expires:refresh_expires_in,
         });
         return {access_token,refresh_token};
@@ -43,6 +45,7 @@ export class AuthController {
         res.cookie('refresh_token','logout',{
             httpOnly:true,
             secure: true,
+            sameSite: 'none',
             expires:new Date(Date.now())
         })
         return response;

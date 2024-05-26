@@ -9,7 +9,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin:process.env.FRONTEND_URL,
-    credentials:true
+    credentials:true,
   })
   await app.listen(process.env.PORT || 3001);
   console.log(`[bootstrap] server is running on port: ${process.env.PORT}`)
