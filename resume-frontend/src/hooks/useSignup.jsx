@@ -4,7 +4,7 @@ import axios from '../api/axios';
 
 export const useSignup=()=>{
     const [error,setError]=useState(null)
-    const [isLoading,setIsLoading]=useState(null)
+    const [isLoading,setIsLoading]=useState(false)
     const {dispatch}=useAuthContext();
 
     const signup=async (email,password)=>{
