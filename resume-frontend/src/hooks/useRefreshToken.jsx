@@ -7,8 +7,6 @@ const useRefreshToken = () => {
     const response=await axios.post('/auth/refresh',{},{
         withCredentials: true
     });
-    console.log("Hello from Refresh Token");
-    console.log(response)
     dispatch({type:'LOGIN',payload:response.data})
     return response?.data?.access_token;
   }

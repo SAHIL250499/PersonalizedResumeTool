@@ -34,7 +34,6 @@ const Resume = () => {
     getAchievements();
     getLanguages();
     getInterests();
-    return console.log("unmounted");
   },[])
 
 
