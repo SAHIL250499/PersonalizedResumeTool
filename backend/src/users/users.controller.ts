@@ -8,48 +8,7 @@ export class UsersController {
 
     constructor(private usersService:UsersService){}
 
-    // Get Requests
-    @Get('getHeader')
-    getHeader(@GetCurrentUserId() userId:number){
-        return this.usersService.getHeader(userId);
-    }
-
-    @Get('getWorkExp')
-    getWorkExp(@GetCurrentUserId() userId:number){
-        return this.usersService.getWorkExp(userId);
-    }
-
-    @Get('getEducation')
-    getEducation(@GetCurrentUserId() userId:number){
-        return this.usersService.getEducation(userId);
-    }
-
-    @Get('getProject')
-    getProject(@GetCurrentUserId() userId:number){
-        return this.usersService.getProject(userId);
-    }
-
-    @Get('getSkills')
-    getSkills(@GetCurrentUserId() userId:number){
-        return this.usersService.getSkills(userId);
-    }
-
-    @Get('getAchievements')
-    getAchievements(@GetCurrentUserId() userId:number){
-        return this.usersService.getAchievements(userId);
-    }
-
-    @Get('getLanguages')
-    getLanguages(@GetCurrentUserId() userId:number){
-        return this.usersService.getLanguages(userId);
-    }
-
-    @Get('getInterests')
-    getInterests(@GetCurrentUserId() userId:number){
-        return this.usersService.getInterests(userId);
-    }
-
-
+    // Get Request
 
     @Get('getAllDetails')
     getAllDetails(@GetCurrentUserId() userId:number){

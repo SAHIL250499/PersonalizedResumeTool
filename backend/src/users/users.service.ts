@@ -164,75 +164,10 @@ export class UsersService {
         }
     }
 
-
-
-
-
-
-    async getHeader(userId:number){
-        const isHeaderExists=await this.userModel.findOne({_id:userId,headerid:{$ne:null}});
-        if(!isHeaderExists) throw new HttpException('No Header Details',400);
-        const getHeaderDetails=await this.headerModel.findById(isHeaderExists.headerid);
-        return getHeaderDetails
-    }
-
-
-    async getWorkExp(userId:number){
-        const isworkExpExists=await this.userModel.findOne({_id:userId,workexparray:{$ne:null}});
-        if(!isworkExpExists) throw new HttpException('No WorkExp Details',400);
-        const workExpList=(await this.userModel.findOne({_id:userId},{workexparray:1}).populate('workexparray'));
-        return workExpList.workexparray
-    }
-
-
-    async getEducation(userId:number){
-        const iseducationExists=await this.userModel.findOne({_id:userId,educationarray:{$ne:null}});
-        if(!iseducationExists) throw new HttpException('No Education Details',400);
-        const educationList=await this.userModel.findOne({_id:userId},{educationarray:1}).populate('educationarray');
-        return educationList.educationarray
-    }
-
-    async getProject(userId:number){
-        const isprojectExists=await this.userModel.findOne({_id:userId,projectarray:{$ne:null}});
-        if(!isprojectExists) throw new HttpException('No Project Details',400);
-        const projectList=await this.userModel.findOne({_id:userId},{projectarray:1}).populate('projectarray');
-        return projectList.projectarray;
-    }
-
-    async getSkills(userId:number){
-        const isupdateSkills=await this.userModel.findOne({_id:userId,skills:{$ne:null}});
-        if(!isupdateSkills) throw new HttpException('No Skills Details',400);
-        const skillList=await this.userModel.findOne({_id:userId},{skills:1});
-        return skillList.skills;
-    }
-
-    async getAchievements(userId:number){
-        const isupdateAchievements=await this.userModel.findOne({_id:userId,achievements:{$ne:null}});
-        if(!isupdateAchievements) throw new HttpException('No Achievements Details',400);
-        const achievementList=await this.userModel.findOne({_id:userId},{achievements:1});
-        return achievementList.achievements;
-    }
-
-    async getLanguages(userId:number){
-        const isupdateLanguages=await this.userModel.findOne({_id:userId,languages:{$ne:null}});
-        if(!isupdateLanguages) throw new HttpException('No Languages Details',400);
-        const languageList=await this.userModel.findOne({_id:userId},{languages:1});
-        return languageList.languages;
-    }
-
-    async getInterests(userId:number){
-        const isupdateInterests=await this.userModel.findOne({_id:userId,interests:{$ne:null}});
-        if(!isupdateInterests) throw new HttpException('No Interests Details',400);
-        const interestList=await this.userModel.findOne({_id:userId},{interests:1});
-        return interestList.interests;
-    }
-
     async getAllDetails(userId: number){
         const allDetailsList = await this.userModel.findOne({_id: userId}).select({_id: 0,email: 0,password: 0,hashedRt: 0,__v: 0}).populate('headerid').populate('workexparray').populate('educationarray').populate('projectarray');
         return allDetailsList;
     }
-
-
 
 
     async deleteLastWorkExp(userId:number){
