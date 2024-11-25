@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
-const ModalSocialLinks = ({closeModal,formState,setFormState,socData,getHeader}) => {
+const ModalSocialLinks = ({closeModal,formState,setFormState,socData,getHeader,onUpdate}) => {
    const axiosPrivate=useAxiosPrivate();
    
    useEffect(()=>{
@@ -47,24 +47,18 @@ const ModalSocialLinks = ({closeModal,formState,setFormState,socData,getHeader})
           console.error(err);
         }
     }
+
+    const getSavedSocialLinks=()=>{
+        onUpdate({socialLink: formState});
+    }
       
 
     const discardFunc = () => {
-      // setFormState({
-      //   emailCheckbox: false,
-      //   linkedInCheckbox: false,
-      //   githubCheckbox: false,
-      //   personalWebCheckbox: false,
-      //   email: '',
-      //   linkedIn: '',
-      //   github: '',
-      //   personalWebsite: ''});
       closeModal();
     }
 
     useEffect(()=>{
         document.body.style.overflowY="hidden";
-
         return()=>{
             document.body.style.overflowY="scroll";
         };
@@ -234,7 +228,7 @@ const ModalSocialLinks = ({closeModal,formState,setFormState,socData,getHeader})
             >
               Discard
             </button>
-            <input
+            <input onClick={getSavedSocialLinks}
               type='submit'
               value="Save"
               className="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded"

@@ -7,6 +7,56 @@ import { GetCurrentUserId } from 'src/auth/common/decorators';
 export class UsersController {
 
     constructor(private usersService:UsersService){}
+
+    // Get Requests
+    @Get('getHeader')
+    getHeader(@GetCurrentUserId() userId:number){
+        return this.usersService.getHeader(userId);
+    }
+
+    @Get('getWorkExp')
+    getWorkExp(@GetCurrentUserId() userId:number){
+        return this.usersService.getWorkExp(userId);
+    }
+
+    @Get('getEducation')
+    getEducation(@GetCurrentUserId() userId:number){
+        return this.usersService.getEducation(userId);
+    }
+
+    @Get('getProject')
+    getProject(@GetCurrentUserId() userId:number){
+        return this.usersService.getProject(userId);
+    }
+
+    @Get('getSkills')
+    getSkills(@GetCurrentUserId() userId:number){
+        return this.usersService.getSkills(userId);
+    }
+
+    @Get('getAchievements')
+    getAchievements(@GetCurrentUserId() userId:number){
+        return this.usersService.getAchievements(userId);
+    }
+
+    @Get('getLanguages')
+    getLanguages(@GetCurrentUserId() userId:number){
+        return this.usersService.getLanguages(userId);
+    }
+
+    @Get('getInterests')
+    getInterests(@GetCurrentUserId() userId:number){
+        return this.usersService.getInterests(userId);
+    }
+
+
+
+    @Get('getAllDetails')
+    getAllDetails(@GetCurrentUserId() userId:number){
+        return this.usersService.getAllDetails(userId);
+    }
+
+
     
     @Patch('updateHeader')
     updateHeader(@GetCurrentUserId() userId:number,@Body() updateUserDto:any){
@@ -16,11 +66,6 @@ export class UsersController {
     @Patch('updateSocials')
     updateSocial(@GetCurrentUserId() userId:number,@Body() updateSocialDto: any){
         return this.usersService.updateSocial(userId,updateSocialDto);
-    }
-
-    @Get('getHeader')
-    getHeader(@GetCurrentUserId() userId:number){
-        return this.usersService.getHeader(userId);
     }
 
     @Patch('/workid/:workid/updateWorkExp')
@@ -59,40 +104,6 @@ export class UsersController {
     }
 
 
-    @Get('getWorkExp')
-    getWorkExp(@GetCurrentUserId() userId:number){
-        return this.usersService.getWorkExp(userId);
-    }
-
-    @Get('getEducation')
-    getEducation(@GetCurrentUserId() userId:number){
-        return this.usersService.getEducation(userId);
-    }
-
-    @Get('getProject')
-    getProject(@GetCurrentUserId() userId:number){
-        return this.usersService.getProject(userId);
-    }
-
-    @Get('getSkills')
-    getSkills(@GetCurrentUserId() userId:number){
-        return this.usersService.getSkills(userId);
-    }
-
-    @Get('getAchievements')
-    getAchievements(@GetCurrentUserId() userId:number){
-        return this.usersService.getAchievements(userId);
-    }
-
-    @Get('getLanguages')
-    getLanguages(@GetCurrentUserId() userId:number){
-        return this.usersService.getLanguages(userId);
-    }
-
-    @Get('getInterests')
-    getInterests(@GetCurrentUserId() userId:number){
-        return this.usersService.getInterests(userId);
-    }
 
 
 
