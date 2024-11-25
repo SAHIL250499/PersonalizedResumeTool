@@ -17,6 +17,7 @@ const Resume = () => {
   const axiosPrivate = useAxiosPrivate();
 
 
+  const [headerData,setHeaderData]=useState({});
   const [workExpList,setWorkExpList]=useState([<WorkExperience key={0} value={0}/>]);
   const [educationList,setEducationlist]=useState([<Education key={0} value={0} />]);
   const [skillsList,setSkillsList]=useState([<Skills key={0} value={0}/>]);
@@ -27,145 +28,95 @@ const Resume = () => {
 
 
   useEffect(()=>{
-    getWorkExp();
-    getEducation();
-    getProject();
-    getSkills();
-    getAchievements();
-    getLanguages();
-    getInterests();
-  },[])
+    getAllDetails();
+  },[axiosPrivate])
 
 
-  const getWorkExp=async()=>{
+  const getAllDetails= async() =>{
     try{
-      const response=await axiosPrivate.get('/users/getWorkExp');
+      const response=await axiosPrivate.get('/users/getAllDetails');
     
       const json=response.data;
+      console.log(json);
       
       if(json && json.length!==0){
-      setWorkExpList([]);
-      const workExpComponents=json.map((data,index)=>(
-        <WorkExperience key={index} value={index} workexpdata={data}/>
-      ))
-      setWorkExpList(workExpComponents);
-    }
-    }
-    catch(err){
-      console.log(err);
-    };
-  }
+        //Get Header
+        if(json.headerid){
+          setHeaderData(json.headerid);
+        }
+        //getWorExp
+        // setWorkExpList([]);
+        if(json.workexparray && json.workexparray.length !== 0){
+            const workExpComponents=json.workexparray.map((data,index)=>(
+              <WorkExperience key={index} value={index} workexpdata={data}/>
+            ))
+            setWorkExpList(workExpComponents);
+          }
+
+        // setEducationlist([]);
+          
+        if(json.educationarray && json.educationarray.length !== 0){
+          const educationComponents=json.educationarray.map((data,index)=>{
+            return <Education key={index} value={index} educationdata={data}/>
+          })
+          setEducationlist(educationComponents);
+        }
+
+        // setProjectsList([]);
+        
+        if(json.projectarray && json.projectarray.length !== 0){
+          const projectComponents=json.projectarray.map((data,index)=>(
+            <PersonalProjects key={index} value={index} projectdata={data}/>
+          ))
+          setProjectsList(projectComponents);
+        }
 
 
-  const getEducation=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getEducation');
-      
-      const json=response.data;
-      if(json && json.length!==0){
-    
-      setEducationlist([]);
-      
-      const educationComponents=json.map((data,index)=>{
-        console.log(data);
-        return <Education key={index} value={index} educationdata={data}/>
-      })
-      setEducationlist(educationComponents);
-    }
-    }
-    catch(err){
-      console.log(err);
-    };
-  }
+        // setSkillsList([]);
+        
+        if(json.skills && json.skills.length !== 0){
+          const skillComponents=json.skills.map((data,index)=>(
+            <Skills key={index} value={index} skilldata={data}/>
+          ))
+          setSkillsList(skillComponents);
+        }
 
-  const getProject=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getProject');
-      const json=response.data;
-      if(json && json.length!==0){
-      setProjectsList([]);
-  
-      const projectComponents=json.map((data,index)=>(
-        <PersonalProjects key={index} value={index} projectdata={data}/>
-      ))
-      setProjectsList(projectComponents);
-    }
-    }
-    catch(err){
-      console.log(err);
-    };
-  }
+        // setAchievementsList([]);
+        if(json.achievements && json.achievements.length !== 0){
+          const achievementComponents=json.achievements.map((data,index)=>(
+            <Achievements key={index} value={index} achievementData={data}/>
+          ))
+          setAchievementsList(achievementComponents);
+        }
 
-  const getSkills=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getSkills');
-      const json=response.data;
-      if(json && json.length!==0){
-      setSkillsList([]);
-  
-      const skillComponents=json.map((data,index)=>(
-        <Skills key={index} value={index} skilldata={data}/>
-      ))
-      setSkillsList(skillComponents);
+        // setLanguageList([]);
+        if(json.languages && json.languages.length !== 0){
+          const languageComponents=json.languages.map((data,index)=>(
+            <Language key={index} value={index} languagedata={data}/>
+          ))
+          setLanguageList(languageComponents);
+        }
+
+        // setInterestList([]);
+        if(json.interests && json.interests.length !== 0){
+          const interestComponents=json.interests.map((data,index)=>(
+            <Interest key={index} value={index} interestdata={data}/>
+          ))
+          setInterestList(interestComponents);
+        }    
       }
     }
     catch(err){
       console.log(err);
-    };
-  }
-
-  const getAchievements=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getAchievements');
-      const json=response.data;
-      if(json && json.length!==0){
-      setAchievementsList([]);
-  
-      const achievementComponents=json.map((data,index)=>(
-        <Achievements key={index} value={index} achievementData={data}/>
-      ))
-      setAchievementsList(achievementComponents);
-      }
     }
-    catch(err){
-      console.log(err);
-    };
   }
 
-  const getLanguages=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getLanguages');
-      const json=response.data;
-      if(json && json.length!==0){
-      setLanguageList([]);
-      const languageComponents=json.map((data,index)=>(
-        <Language key={index} value={index} languagedata={data}/>
-      ))
-      setLanguageList(languageComponents);
-      }
-    }
-    catch(err){
-      console.log(err);
-    };
-  }
-
-  const getInterests=async()=>{
-    try{
-      const response=await axiosPrivate.get('/users/getInterests');
-      const json=response.data;
-      if(json && json.length!==0){
-      setInterestList([]);
-      const interestComponents=json.map((data,index)=>(
-        <Interest key={index} value={index} interestdata={data}/>
-      ))
-      setInterestList(interestComponents);
-      }
-    }
-    catch(err){
-      console.log(err);
-    };
-  }
-
+  const handleSocialDataUpdate = (updatedData) => {
+    setHeaderData((prevData) => ({
+      ...prevData,
+      socialLink: updatedData.socialLink, // Update only the social links part
+    }));
+  };
 
 
   const handleClose = () => {
@@ -323,7 +274,7 @@ const Resume = () => {
     <div className='bg-[#313b47]'>
       <div className="flex flex-col items-center justify-center space-y-10 p-80">
         <div id='resume' ref={inputRef} className='container bg-white min-h-[1182px] w-[1182px]'>
-          <Header />
+          <Header headerData={headerData} onUpdate={handleSocialDataUpdate} />
           {/* Horizontal Line */}
           <hr
             className="mt-12 h-1 w-full dark:bg-[#242b33]"
@@ -557,7 +508,6 @@ const Resume = () => {
 
 
           </div>
-          
         </div>
         <div className='flex space-x-12'>
         <Navbar/>

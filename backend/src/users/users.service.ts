@@ -227,7 +227,10 @@ export class UsersService {
         return interestList.interests;
     }
 
-    
+    async getAllDetails(userId: number){
+        const allDetailsList = await this.userModel.findOne({_id: userId}).select({_id: 0,email: 0,password: 0,hashedRt: 0,__v: 0}).populate('headerid').populate('workexparray').populate('educationarray').populate('projectarray');
+        return allDetailsList;
+    }
 
 
 
