@@ -15,7 +15,6 @@ import useAxiosPrivate from './hooks/useAxiosPrivate';
 const Resume = () => {
   const inputRef=useRef(null);
   const axiosPrivate = useAxiosPrivate();
-  const PING_INTERVAL = 10 * 60 * 1000;
 
   const [headerData,setHeaderData]=useState({});
   const [workExpList,setWorkExpList]=useState([<WorkExperience key={0} value={0}/>]);
@@ -29,10 +28,6 @@ const Resume = () => {
 
   useEffect(()=>{
     getAllDetails();
-
-    const intervalId = setInterval(getAllDetails, PING_INTERVAL);
-
-    return () => clearInterval(intervalId);
   },[axiosPrivate])
 
 
