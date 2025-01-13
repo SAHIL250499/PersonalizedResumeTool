@@ -36,6 +36,13 @@ export class AuthController {
         });
         return {access_token,refresh_token};
     }
+
+    @Public()
+    @Get('/healthcheck')
+    @HttpCode(HttpStatus.OK)
+    healthCheck(): { message: string } {
+        return { message: 'Server is active' };
+    }
     
     @Post('logout')
     @HttpCode(HttpStatus.OK)
